@@ -1,10 +1,8 @@
-package org.xiatian.rpc.remote.Impl;
+package org.xiatian.rpc.remote;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xiatian.rpc.common.annotation.Service;
-import org.xiatian.rpc.remote.dto.HelloObject;
-import org.xiatian.rpc.remote.HelloService;
 
 @Service
 public class HelloServiceImpl implements HelloService {

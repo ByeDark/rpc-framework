@@ -62,7 +62,7 @@ public class NettyClient implements RpcClient {
             prop.load(input);
             // 读取配置信息
             String propertySerializer = prop.getProperty("serializer");
-            System.out.println(propertySerializer);
+            System.out.println("从配置文件读取到序列化方式："+propertySerializer);
             switch (propertySerializer) {
                 case "json" -> serializer = CommonSerializer.getByCode(CommonSerializer.JSON_SERIALIZER);
                 case "kyro" -> serializer = CommonSerializer.getByCode(CommonSerializer.KRYO_SERIALIZER);

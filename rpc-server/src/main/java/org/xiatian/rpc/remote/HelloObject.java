@@ -1,4 +1,4 @@
-package org.xiatian.rpc.remote.dto;
+package org.xiatian.rpc.remote;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

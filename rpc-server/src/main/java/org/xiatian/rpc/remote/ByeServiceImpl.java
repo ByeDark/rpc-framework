@@ -1,4 +1,4 @@
-package org.xiatian.rpc.remote.Impl;
+package org.xiatian.rpc.remote;
 
 import org.xiatian.rpc.common.annotation.Service;
 import org.xiatian.rpc.remote.ByeService;
