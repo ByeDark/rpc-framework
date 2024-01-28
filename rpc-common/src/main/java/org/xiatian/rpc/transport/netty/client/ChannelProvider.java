@@ -43,6 +43,7 @@ public class ChannelProvider {
             protected void initChannel(SocketChannel ch) {
                 /*自定义序列化编解码器*/
                 // RpcResponse -> ByteBuf
+                //增加心跳机制
                 ch.pipeline().addLast(new CommonEncoder(serializer))
                         .addLast(new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS))
                         .addLast(new CommonDecoder())

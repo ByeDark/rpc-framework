@@ -10,7 +10,9 @@ import org.xiatian.rpc.util.NacosUtil;
 import java.net.InetSocketAddress;
 
 /**
- * Nacos服务注册中心
+ * Nacos 服务注册中心
+ * 初始化   服务的注册
+ * 调用的全部封装到Util里面
  */
 public class NacosServiceRegistry implements ServiceRegistry {
 

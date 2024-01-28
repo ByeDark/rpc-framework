@@ -17,6 +17,7 @@ import java.util.Set;
 
 /**
  * 管理Nacos连接等工具类
+ * 服务的注册和发现的核心函数都在这里面
  */
 public class NacosUtil {
 
@@ -49,6 +50,7 @@ public class NacosUtil {
         serviceNames.add(serviceName);
     }
 
+    //服务发现 getAllInstances获得所有的服务
     public static List<Instance> getAllInstance(String serviceName) throws NacosException {
         return namingService.getAllInstances(serviceName);
     }

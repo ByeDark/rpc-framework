@@ -8,8 +8,9 @@ import org.xiatian.rpc.entity.RpcRequest;
  */
 public interface RpcClient {
 
+    //序列化方式
     int DEFAULT_SERIALIZER = CommonSerializer.KRYO_SERIALIZER;
-
+    //发送请求
     Object sendRequest(RpcRequest rpcRequest);
 
 }

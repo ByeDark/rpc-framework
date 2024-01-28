@@ -5,7 +5,9 @@ import org.xiatian.rpc.entity.RpcResponse;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * 未处理完毕的消息都会放在这个单例的容器之中，处理完了就会从hashmap中移除
+ */
 public class UnprocessedRequests {
 
     private static final ConcurrentHashMap<String, CompletableFuture<RpcResponse>> unprocessedResponseFutures

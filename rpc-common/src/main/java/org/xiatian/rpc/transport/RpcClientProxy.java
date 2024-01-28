@@ -35,8 +35,14 @@ public class RpcClientProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         logger.info("调用方法: {}#{}", method.getDeclaringClass().getName(), method.getName());
-        RpcRequest rpcRequest = new RpcRequest(UUID.randomUUID().toString(), method.getDeclaringClass().getName(),
-                method.getName(), args, method.getParameterTypes(), false);
+        //构建发送的消息
+        RpcRequest rpcRequest = RpcRequest.builder()
+                .requestId(UUID.randomUUID().toString())
+                .interfaceName(method.getDeclaringClass().getName())
+                .methodName(method.getName())
+                .paramTypes(method.getParameterTypes())
+                .heartBeat(false)
+                .build();
         RpcResponse rpcResponse = null;
         if (client instanceof NettyClient) {
             try {
@@ -47,10 +53,6 @@ public class RpcClientProxy implements InvocationHandler {
                 return null;
             }
         }
-//        可增加端口通信等
-//        if (client instanceof SocketClient) {
-//            rpcResponse = (RpcResponse) client.sendRequest(rpcRequest);
-//        }
         RpcMessageChecker.check(rpcRequest, rpcResponse);
         assert rpcResponse != null;
         return rpcResponse.getData();

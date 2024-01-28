@@ -13,7 +13,11 @@ import org.xiatian.rpc.util.NacosUtil;
 import java.net.InetSocketAddress;
 import java.util.List;
 
-
+/**
+ * Nacos 服务发现
+ * 初始化   根据名字获得服务的具体地址
+ * 调用的全部封装到Util里面
+ */
 public class NacosServiceDiscovery implements ServiceDiscovery {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosServiceDiscovery.class);
@@ -25,6 +29,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
         else this.loadBalancer = loadBalancer;
     }
 
+    //思路：先通过注册中心得到服务的List集合，然后利用负载均衡策略从里面选一个，然后返回这个服务的ip和端口地址
     @Override
     public InetSocketAddress lookupService(String serviceName) {
         try {
