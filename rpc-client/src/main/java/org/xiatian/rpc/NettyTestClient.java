@@ -15,7 +15,7 @@ public class NettyTestClient {
 
     public static void main(String[] args) {
         //初始化配置，设置选择哪一种序列化方式
-        RpcClient client = new NettyClient(CommonSerializer.JSON_SERIALIZER);
+        RpcClient client = new NettyClient();
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         //通过这种序列化方式对服务进行动态代理
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);

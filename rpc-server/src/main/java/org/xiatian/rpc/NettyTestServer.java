@@ -11,7 +11,7 @@ import org.xiatian.rpc.transport.netty.server.NettyServer;
 @ServiceScan
 public class NettyTestServer {
     public static void main(String[] args) {
-        RpcServer server = new NettyServer("127.0.0.1", 9999, CommonSerializer.JSON_SERIALIZER);
+        RpcServer server = new NettyServer("127.0.0.1", 9999);
         server.start();
     }
 }

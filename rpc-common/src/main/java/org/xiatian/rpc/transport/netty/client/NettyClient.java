@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xiatian.rpc.common.enumeration.RpcError;
@@ -20,7 +21,10 @@ import org.xiatian.rpc.registry.NacosServiceDiscovery;
 import org.xiatian.rpc.registry.ServiceDiscovery;
 import org.xiatian.rpc.transport.RpcClient;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -31,6 +35,9 @@ public class NettyClient implements RpcClient {
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
     private static final EventLoopGroup group;
     private static final Bootstrap bootstrap;
+    private final ServiceDiscovery serviceDiscovery;
+    private final CommonSerializer serializer;
+    private final UnprocessedRequests unprocessedRequests;
 
     static {
         group = new NioEventLoopGroup();
@@ -39,27 +46,32 @@ public class NettyClient implements RpcClient {
                 .channel(NioSocketChannel.class);
     }
 
-    private final ServiceDiscovery serviceDiscovery;
-    private final CommonSerializer serializer;
-
-    private final UnprocessedRequests unprocessedRequests;
-
     public NettyClient() {
-        this(DEFAULT_SERIALIZER, new RandomLoadBalancer());
+        this(new RandomLoadBalancer());
     }
 
     public NettyClient(LoadBalancer loadBalancer) {
-        this(DEFAULT_SERIALIZER, loadBalancer);
-    }
-
-    public NettyClient(Integer serializer) {
-        this(serializer, new RandomLoadBalancer());
-    }
-
-    public NettyClient(Integer serializer, LoadBalancer loadBalancer) {
         this.serviceDiscovery = new NacosServiceDiscovery(loadBalancer);
-        this.serializer = CommonSerializer.getByCode(serializer);
         this.unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
+        Properties prop = new Properties();
+        try (InputStream input = NettyClient.class.getClassLoader().getResourceAsStream("application.yaml")) {
+            if (input == null) {
+                logger.info("未检测到序列化配置，使用了默认的JSON序列化器");
+            }
+            // 加载配置文件
+            prop.load(input);
+            // 读取配置信息
+            String propertySerializer = prop.getProperty("serializer");
+            System.out.println(propertySerializer);
+            switch (propertySerializer) {
+                case "json" -> serializer = CommonSerializer.getByCode(CommonSerializer.JSON_SERIALIZER);
+                case "kyro" -> serializer = CommonSerializer.getByCode(CommonSerializer.KRYO_SERIALIZER);
+                case "hessian" -> serializer = CommonSerializer.getByCode(CommonSerializer.HESSIAN_SERIALIZER);
+                default -> serializer = CommonSerializer.getByCode(DEFAULT_SERIALIZER);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

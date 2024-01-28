@@ -3,6 +3,8 @@ package org.xiatian.rpc.transport;
 import org.xiatian.rpc.common.serializer.CommonSerializer;
 import org.xiatian.rpc.entity.RpcRequest;
 
+import java.util.Properties;
+
 /**
  * 客户端类通用接口
  */
